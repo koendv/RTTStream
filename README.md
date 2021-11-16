@@ -84,10 +84,10 @@ rtt stream test end
 
 These are the results of the [SpeedTest](https://github.com/koendv/Arduino-RTTStream/blob/main/examples/SpeedTest/SpeedTest.ino) sketch:
 
-| debugger | target | char/s |
-|---|---|---|
-|J-Link ARM-OB STM32 V7.00 | stm32f103 blue pill | 22651|
-|J-Link V11 | stm32f103 blue pill | 217590|
+| debugger |version| target | char/s |
+|---|---|---|---|
+|J-Link ARM-OB STM32 |V7.00 | stm32f103 blue pill | 22651|
+|J-Link V11 | V11.00|stm32f103 blue pill | 217590|
 
 This is an indication what speeds to expect.
 Open an issue if you have test results you'd like me to add.
