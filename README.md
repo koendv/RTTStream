@@ -82,7 +82,7 @@ rtt stream test end
 ```
 ## Speed Test Results
 
-These are the results of the [SpeedTest](https://github.com/koendv/Arduino-RTTStream/blob/main/examples/SpeedTest/SpeedTest.ino) sketch:
+These are the results of the [SpeedTest](https://github.com/koendv/Arduino-RTTStream/blob/main/examples/SpeedTest/SpeedTest.ino) sketch for different debuggers:
 
 | firmware |hardware| target | char/s |
 |---|---|---|---|
