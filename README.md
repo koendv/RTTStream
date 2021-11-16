@@ -80,6 +80,17 @@ enter a string and wait 5 seconds: qwerty
 string: qwerty
 rtt stream test end
 ```
+## Speed Test Results
+
+These are the results of the [SpeedTest](https://github.com/koendv/Arduino-RTTStream/blob/main/examples/SpeedTest/SpeedTest.ino) sketch:
+
+| debugger | target | char/s |
+|---|---|---|
+|J-Link ARM-OB STM32 on stm32f103 blue pill | stm32f103 blue pill | 22651|
+|J-Link V11 | stm32f103 blue pill | 217590|
+
+This is an indication what speeds to expect.
+Open an issue if you have test results you'd like me to add.
 
 ## Links
 - The Eclipse development environment has a [plugin](https://eclipse-embed-cdt.github.io/debug/jlink/) to automate using Segger J-Link.
