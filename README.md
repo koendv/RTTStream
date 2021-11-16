@@ -86,7 +86,7 @@ These are the results of the [SpeedTest](https://github.com/koendv/Arduino-RTTSt
 
 | debugger | target | char/s |
 |---|---|---|
-|J-Link ARM-OB STM32 on stm32f103 blue pill | stm32f103 blue pill | 22651|
+|J-Link ARM-OB STM32 V7.00 | stm32f103 blue pill | 22651|
 |J-Link V11 | stm32f103 blue pill | 217590|
 
 This is an indication what speeds to expect.
