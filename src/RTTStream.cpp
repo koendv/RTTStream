@@ -49,7 +49,7 @@ void RTTStream::trimDownBufferFull()
 
 int RTTStream::available()
 {
-	int bytes_in_buffer = SEGGER_RTT_HasData(0);
+	int bytes_in_buffer = SEGGER_RTT_GetBytesInDownBuffer(0);
 	return bytes_in_buffer;
 }
 

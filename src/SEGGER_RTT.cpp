@@ -2083,6 +2083,38 @@ unsigned SEGGER_RTT_GetBytesInBuffer(unsigned BufferIndex) {
 
 /*************************** End of file ****************************/
 
+/*********************************************************************
+*
+*       SEGGER_RTT_GetBytesInDownBuffer()
+*
+*  Function description
+*    Returns the number of bytes currently used in the down buffer.
+*
+*  Parameters
+*    BufferIndex  Index of the down buffer.
+*
+*  Return value
+*    Number of bytes that are used in the buffer.
+*/
+unsigned SEGGER_RTT_GetBytesInDownBuffer(unsigned BufferIndex) {
+  unsigned RdOff;
+  unsigned WrOff;
+  unsigned r;
+  volatile SEGGER_RTT_CB* pRTTCB;
+  //
+  // Avoid warnings regarding volatile access order.  It's not a problem
+  // in this case, but dampen compiler enthusiasm.
+  //
+  pRTTCB = (volatile SEGGER_RTT_CB*)((unsigned char*)&_SEGGER_RTT + SEGGER_RTT_UNCACHED_OFF);  // Access RTTCB uncached to make sure we see changes made by the J-Link side and all of our changes go into HW directly
+  RdOff = pRTTCB->aDown[BufferIndex].RdOff;
+  WrOff = pRTTCB->aDown[BufferIndex].WrOff;
+  if (RdOff <= WrOff) {
+    r = WrOff - RdOff;
+  } else {
+    r = pRTTCB->aDown[BufferIndex].SizeOfBuffer - (WrOff - RdOff);
+  }
+  return r;
+}
 
 /*********************************************************************
 *
@@ -2147,4 +2179,5 @@ int SEGGER_RTT_Peek(unsigned BufferIndex) {
   SEGGER_RTT_UNLOCK();
   return retval;
 }
+
 // not truncated
