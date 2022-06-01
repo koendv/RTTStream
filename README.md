@@ -83,6 +83,6 @@ rtt stream test end
 
 ## Links
 - The Eclipse development environment has a [plugin](https://eclipse-embed-cdt.github.io/debug/jlink/) to automate using Segger J-Link.
-- OpenOCD has a section on using [RTT](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029)
+- [OpenOCD](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029) and  [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic/blob/master/UsingRTT.md) support RTT.
 
 *not truncated*
