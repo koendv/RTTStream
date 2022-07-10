@@ -35,6 +35,11 @@ virtual size_t write(const uint8_t *buffer, size_t size);
 virtual void flush();
 using Print::write;
 int printf(const char *format, ...);
+
+/* compatibility with Serial */
+void begin(unsigned long);
+operator bool();
+
 };
 
 #endif

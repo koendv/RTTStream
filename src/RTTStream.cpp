@@ -104,4 +104,16 @@ int RTTStream::printf(const char *format, ...)
 	return retval;
 }
 
+/* compatibility with Serial */
+
+void RTTStream::begin(unsigned long baudrate)
+{
+	(void) baudrate;
+}
+
+RTTStream::operator bool()
+{
+	return true;
+}
+
 /* not truncated */
