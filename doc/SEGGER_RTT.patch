@@ -1,0 +1,119 @@
+diff -urN OLD/SEGGER_RTT_V763b/RTT/SEGGER_RTT.c NEW/SEGGER_RTT_V763b/RTT/SEGGER_RTT.c
+--- OLD/SEGGER_RTT_V763b/RTT/SEGGER_RTT.c	2022-03-01 15:16:57.000000000 +0100
++++ NEW/SEGGER_RTT_V763b/RTT/SEGGER_RTT.c	2022-10-21 12:08:15.669516862 +0200
+@@ -2088,4 +2088,101 @@
+   return r;
+ }
+ 
++/*********************************************************************
++*
++*       SEGGER_RTT_GetBytesInDownBuffer()
++*
++*  Function description
++*    Returns the number of bytes currently used in the down buffer.
++*
++*  Parameters
++*    BufferIndex  Index of the down buffer.
++*
++*  Return value
++*    Number of bytes that are used in the buffer.
++*/
++unsigned SEGGER_RTT_GetBytesInDownBuffer(unsigned BufferIndex) {
++  unsigned RdOff;
++  unsigned WrOff;
++  unsigned r;
++  volatile SEGGER_RTT_CB* pRTTCB;
++  //
++  // Avoid warnings regarding volatile access order.  It's not a problem
++  // in this case, but dampen compiler enthusiasm.
++  //
++  pRTTCB = (volatile SEGGER_RTT_CB*)((unsigned char*)&_SEGGER_RTT + SEGGER_RTT_UNCACHED_OFF);  // Access RTTCB uncached to make sure we see changes made by the J-Link side and all of our changes go into HW directly
++  RdOff = pRTTCB->aDown[BufferIndex].RdOff;
++  WrOff = pRTTCB->aDown[BufferIndex].WrOff;
++  if (RdOff <= WrOff) {
++    r = WrOff - RdOff;
++  } else {
++    r = pRTTCB->aDown[BufferIndex].SizeOfBuffer - (WrOff - RdOff);
++  }
++  return r;
++}
++
++/*********************************************************************
++*
++*       SEGGER_RTT_PeekNoLock()
++*
++*  Function description
++*    Returns character at current read position
++*    Does not lock against interrupts and multiple access.
++*
++*  Parameters
++*    BufferIndex  Index of Down-buffer to be used (e.g. 0 for "Terminal").
++*
++*  Return value
++*    character at current read position,
++*    -1 if no characters in Down-buffer
++*/
++
++int SEGGER_RTT_PeekNoLock(unsigned BufferIndex) {
++  int                     retval = -1;
++  unsigned                RdOff;
++  unsigned                WrOff;
++  SEGGER_RTT_BUFFER_DOWN* pRing;
++  volatile char*          pSrc;
++  //
++  INIT();
++  pRing = (SEGGER_RTT_BUFFER_DOWN*)((char*)&_SEGGER_RTT.aDown[BufferIndex] + SEGGER_RTT_UNCACHED_OFF);  // Access uncached to make sure we see changes made by the J-Link side and all of our changes go into HW directly
++  RdOff = pRing->RdOff;
++  WrOff = pRing->WrOff;
++
++  //
++  // Return character at current read position
++  //
++  if (RdOff == WrOff) retval = -1;
++  else {
++    pSrc = (pRing->pBuffer + RdOff) + SEGGER_RTT_UNCACHED_OFF;
++    retval = *pSrc;
++  }
++  //
++  return retval;
++}
++
++/*********************************************************************
++*
++*       SEGGER_RTT_Peek()
++*
++*  Function description
++*    Returns character at current read position
++*    Locks against interrupts and multiple access.
++*
++*  Parameters
++*    BufferIndex  Index of Down-buffer to be used (e.g. 0 for "Terminal").
++*
++*  Return value
++*    character at current read position,
++*    -1 if no characters in Down-buffer
++*/
++
++int SEGGER_RTT_Peek(unsigned BufferIndex) {
++  int retval = -1;
++  SEGGER_RTT_LOCK();
++  retval = SEGGER_RTT_PeekNoLock(BufferIndex);
++  SEGGER_RTT_UNLOCK();
++  return retval;
++}
++
+ /*************************** End of file ****************************/
+diff -urN OLD/SEGGER_RTT_V763b/RTT/SEGGER_RTT.h NEW/SEGGER_RTT_V763b/RTT/SEGGER_RTT.h
+--- OLD/SEGGER_RTT_V763b/RTT/SEGGER_RTT.h	2022-03-01 15:16:57.000000000 +0100
++++ NEW/SEGGER_RTT_V763b/RTT/SEGGER_RTT.h	2022-10-21 12:04:22.504247269 +0200
+@@ -378,6 +378,10 @@
+ unsigned     SEGGER_RTT_PutCharSkipNoLock       (unsigned BufferIndex, char c);
+ unsigned     SEGGER_RTT_GetAvailWriteSpace      (unsigned BufferIndex);
+ unsigned     SEGGER_RTT_GetBytesInBuffer        (unsigned BufferIndex);
++unsigned     SEGGER_RTT_GetBytesInDownBuffer    (unsigned BufferIndex);
++int          SEGGER_RTT_PeekNoLock              (unsigned BufferIndex);
++int          SEGGER_RTT_Peek                    (unsigned BufferIndex);
++
+ //
+ // Function macro for performance optimization
+ //
