@@ -46,7 +46,7 @@ File    : SEGGER_RTT.c
 Purpose : Implementation of SEGGER real-time transfer (RTT) which
           allows real-time communication on targets which support
           debugger memory accesses while the CPU is running.
-Revision: $Rev: 23622 $
+Revision: $Rev: 26642 $
 
 Additional information:
           Type "int" is assumed to be 32-bits in size
@@ -267,6 +267,13 @@ static unsigned char _aTerminalId[16] = { '0', '1', '2', '3', '4', '5', '6', '7'
     SEGGER_RTT_CB _SEGGER_RTT                                                             __attribute__ ((aligned (SEGGER_RTT_CPU_CACHE_LINE_SIZE)));
     static char   _acUpBuffer  [SEGGER_RTT__ROUND_UP_2_CACHE_LINE_SIZE(BUFFER_SIZE_UP)]   __attribute__ ((aligned (SEGGER_RTT_CPU_CACHE_LINE_SIZE)));
     static char   _acDownBuffer[SEGGER_RTT__ROUND_UP_2_CACHE_LINE_SIZE(BUFFER_SIZE_DOWN)] __attribute__ ((aligned (SEGGER_RTT_CPU_CACHE_LINE_SIZE)));
+  #elif (defined __ICCARM__)
+    #pragma data_alignment=SEGGER_RTT_CPU_CACHE_LINE_SIZE
+    SEGGER_RTT_CB _SEGGER_RTT;
+    #pragma data_alignment=SEGGER_RTT_CPU_CACHE_LINE_SIZE
+    static char   _acUpBuffer  [SEGGER_RTT__ROUND_UP_2_CACHE_LINE_SIZE(BUFFER_SIZE_UP)];
+    #pragma data_alignment=SEGGER_RTT_CPU_CACHE_LINE_SIZE
+    static char   _acDownBuffer[SEGGER_RTT__ROUND_UP_2_CACHE_LINE_SIZE(BUFFER_SIZE_DOWN)];
   #else
     #error "Don't know how to place _SEGGER_RTT, _acUpBuffer, _acDownBuffer cache-line aligned"
   #endif
@@ -312,6 +319,7 @@ static void _DoInit(void) {
   // Initialize control block
   //
   p                     = (volatile SEGGER_RTT_CB*)((char*)&_SEGGER_RTT + SEGGER_RTT_UNCACHED_OFF);  // Access control block uncached so that nothing in the cache ever becomes dirty and all changes are visible in HW directly
+  memset((SEGGER_RTT_CB*)p, 0, sizeof(_SEGGER_RTT));         // Make sure that the RTT CB is always zero initialized.
   p->MaxNumUpBuffers    = SEGGER_RTT_MAX_NUM_UP_BUFFERS;
   p->MaxNumDownBuffers  = SEGGER_RTT_MAX_NUM_DOWN_BUFFERS;
   //
@@ -1548,6 +1556,7 @@ unsigned SEGGER_RTT_HasDataUp(unsigned BufferIndex) {
 *    pBuffer      Pointer to a buffer to be used.
 *    BufferSize   Size of the buffer.
 *    Flags        Operating modes. Define behavior if buffer is full (not enough space for entire message).
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0 - O.K. Buffer Index
@@ -1596,6 +1605,7 @@ int SEGGER_RTT_AllocDownBuffer(const char* sName, void* pBuffer, unsigned Buffer
 *    pBuffer      Pointer to a buffer to be used.
 *    BufferSize   Size of the buffer.
 *    Flags        Operating modes. Define behavior if buffer is full (not enough space for entire message).
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0 - O.K. Buffer Index
@@ -1645,6 +1655,7 @@ int SEGGER_RTT_AllocUpBuffer(const char* sName, void* pBuffer, unsigned BufferSi
 *    pBuffer      Pointer to a buffer to be used.
 *    BufferSize   Size of the buffer.
 *    Flags        Operating modes. Define behavior if buffer is full (not enough space for entire message).
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0 - O.K.
@@ -1696,6 +1707,7 @@ int SEGGER_RTT_ConfigUpBuffer(unsigned BufferIndex, const char* sName, void* pBu
 *    pBuffer      Pointer to a buffer to be used.
 *    BufferSize   Size of the buffer.
 *    Flags        Operating modes. Define behavior if buffer is full (not enough space for entire message).
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0  O.K.
@@ -1814,6 +1826,7 @@ int SEGGER_RTT_SetNameDownBuffer(unsigned BufferIndex, const char* sName) {
 *  Parameters
 *    BufferIndex  Index of the buffer.
 *    Flags        Flags to set for the buffer.
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0  O.K.
@@ -1849,6 +1862,7 @@ int SEGGER_RTT_SetFlagsUpBuffer(unsigned BufferIndex, unsigned Flags) {
 *  Parameters
 *    BufferIndex  Index of the buffer to renamed.
 *    Flags        Flags to set for the buffer.
+*                 Flags[31:24] are used for validity check and must be zero. Flags[23:2] are reserved for future use. Flags[1:0] = RTT operating mode.
 *
 *  Return value
 *    >= 0  O.K.
@@ -2081,8 +2095,6 @@ unsigned SEGGER_RTT_GetBytesInBuffer(unsigned BufferIndex) {
   return r;
 }
 
-/*************************** End of file ****************************/
-
 /*********************************************************************
 *
 *       SEGGER_RTT_GetBytesInDownBuffer()
@@ -2180,4 +2192,4 @@ int SEGGER_RTT_Peek(unsigned BufferIndex) {
   return retval;
 }
 
-// not truncated
+/*************************** End of file ****************************/
