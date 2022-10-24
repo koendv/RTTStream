@@ -5,7 +5,8 @@
  */
 
 #include <RTTStream.h>
-#include "SEGGER_RTT.h"
+#include <SEGGER_RTT.h>
+#include "SEGGER_RTT_Peek.h"
 
 RTTStream::RTTStream()
 {

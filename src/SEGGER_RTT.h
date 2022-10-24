@@ -378,10 +378,6 @@ unsigned     SEGGER_RTT_PutCharSkip             (unsigned BufferIndex, char c);
 unsigned     SEGGER_RTT_PutCharSkipNoLock       (unsigned BufferIndex, char c);
 unsigned     SEGGER_RTT_GetAvailWriteSpace      (unsigned BufferIndex);
 unsigned     SEGGER_RTT_GetBytesInBuffer        (unsigned BufferIndex);
-unsigned     SEGGER_RTT_GetBytesInDownBuffer    (unsigned BufferIndex);
-int          SEGGER_RTT_PeekNoLock              (unsigned BufferIndex);
-int          SEGGER_RTT_Peek                    (unsigned BufferIndex);
-
 //
 // Function macro for performance optimization
 //
