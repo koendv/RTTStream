@@ -85,10 +85,7 @@ rtt stream test end
 
 RTTStream contains SEGGER RTT source files. Some Arduino boards already include SEGGER RTT as part of the board package, e.g. nrf52.
 
-To avoid duplicates, if the Arduino board package already contains the files `SEGGER_RTT.h`, `SEGGER_RTT.c` and `SEGGER_RTT_Conf.h`, please
-
-- either remove `SEGGER_RTT.h`, `SEGGER_RTT.c` and `SEGGER_RTT_Conf.h` from the board package
-- or remove the files `libraries/RTT_Stream/src/SEGGER_RTT.h`, `libraries/RTT_Stream/src/SEGGER_RTT.c` and `libraries/RTT_Stream/src/SEGGER_RTT_Conf.h`.
+To avoid duplicates, if the Arduino board package already contains the files `SEGGER_RTT.h`, `SEGGER_RTT.c` and `SEGGER_RTT_Conf.h`, please remove the files  `SEGGER_RTT.h`, `SEGGER_RTT.c` and `SEGGER_RTT_Conf.h` from `libraries/RTT_Stream/src/`
 
 This way there is only one version of SEGGER RTT.
 
