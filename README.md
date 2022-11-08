@@ -3,9 +3,9 @@
 ## Description
 Arduino library for [Segger RTT](https://www.segger.com/products/debug-probes/j-link/technology/about-real-time-transfer/) on arm and risc-v Arduinos
 
-With RTTStream an stm32duino can do screen output on a pc, and get keyboard input from a pc, without using usb or serials.
+With RTTStream an stm32duino can do screen output on a pc, and get keyboard input from a pc, without using usb or serials. Connection is using the SWD or JTAG port.
 
-To use RTTStream you need a [Segger JLink](https://www.segger.com/products/debug-probes/j-link/) debugger probe. The JLink debugger probe is a piece of hardware that connects your arduino to the debugger program on your pc.
+To use RTTStream you need a debugger probe. There are commercial and open source probes. [Segger JLink](https://www.segger.com/products/debug-probes/j-link/) is a (very fast) commercial product.  Open source projects that support RTT are  [OpenOCD](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029),   [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic/blob/master/UsingRTT.md), [probe-rs](https://probe.rs/docs/tools/cargo-embed/#rtt) and others.
 
 RTTStream only runs on arduinos with arm or risc-v processors, sorry.
 
