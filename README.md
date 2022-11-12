@@ -5,7 +5,7 @@ Arduino library for [Segger RTT](https://www.segger.com/products/debug-probes/j-
 
 With RTTStream an stm32duino can do screen output on a pc, and get keyboard input from a pc, without using usb or serials. Connection is using the SWD or JTAG port.
 
-To use RTTStream you need a debugger probe. There are commercial and open source probes. [Segger JLink](https://www.segger.com/products/debug-probes/j-link/) is a (very fast) commercial product.  Open source projects that support RTT are  [OpenOCD](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029),   [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic/blob/master/UsingRTT.md), [probe-rs](https://probe.rs/docs/tools/cargo-embed/#rtt) and others.
+To use RTTStream you need a [Segger JLink](https://www.segger.com/products/debug-probes/j-link/) debugger probe. Depending upon your needs, Open Source alternatives may also be suitable.
 
 RTTStream only runs on arduinos with arm or risc-v processors, sorry.
 
@@ -91,6 +91,6 @@ This way there is only one version of SEGGER RTT.
 
 ## Links
 - The Eclipse development environment has a [plugin](https://eclipse-embed-cdt.github.io/debug/jlink/) to automate using Segger J-Link.
-- [OpenOCD](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029) and  [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic/blob/master/UsingRTT.md) support RTT.
+-  Open source projects that support RTT are  [OpenOCD](https://openocd.org/doc/html/General-Commands.html#Real-Time-Transfer-_0028RTT_0029),   [Black Magic Probe](https://github.com/blackmagic-debug/blackmagic/blob/master/UsingRTT.md), [probe-rs](https://probe.rs/docs/tools/cargo-embed/#rtt) and others.
 
 *not truncated*
